@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:to_do_list/models/todo.dart';
 import 'package:to_do_list/widgets/todo_list_item.dart';
 
 class ToDoListPage extends StatefulWidget {
@@ -13,7 +14,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
   TextEditingController todoController = TextEditingController();
 
   // States
-  List<String> todoList = [];
+  List<Todo> todoList = [];
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +42,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
                     ElevatedButton(
                       onPressed: () {
                         setState(() {
-                          todoList.add(todoController.text);
+                          todoList.add(Todo(title: todoController.text, date: DateTime.now()));
                         });
                         todoController.clear();
                       },
@@ -60,12 +61,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
                   child: ListView(
                     shrinkWrap: true,
                     children: [
-                      for (String currentTodo in todoList)
-                        TodoListItem(
-                          title: currentTodo,
-                          date: '00/00/0000',
-                          hour: '00:00',
-                        ),
+                      for (Todo currentTodo in todoList) TodoListItem(todo: currentTodo),
                     ],
                   ),
                 ),
