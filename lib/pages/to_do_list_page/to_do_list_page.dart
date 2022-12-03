@@ -60,8 +60,13 @@ class _ToDoListPageState extends State<ToDoListPage> {
                 Flexible(
                   child: ListView(
                     shrinkWrap: true,
+                    padding: const EdgeInsets.only(top: 16),
                     children: [
-                      for (Todo currentTodo in todoList) TodoListItem(todo: currentTodo),
+                      for (Todo currentTodo in todoList)
+                        TodoListItem(
+                          todo: currentTodo,
+                          onDelete: onDelete,
+                        ),
                     ],
                   ),
                 ),
@@ -73,13 +78,19 @@ class _ToDoListPageState extends State<ToDoListPage> {
                         child: Text('Você possui ${todoList.length} tarefas pendentes'),
                       ),
                       ElevatedButton(
-                        onPressed: () {},
+                        onPressed: todoList.isNotEmpty
+                            ? () {
+                                setState(() {
+                                  onDeleteAll();
+                                });
+                              }
+                            : null, // Disable button when is empty
                         style: ElevatedButton.styleFrom(
                           primary: Colors.indigo,
                           padding: const EdgeInsets.all(12),
                         ),
                         child: const Text(
-                          'Limpar tudo  ',
+                          'Limpar tudo',
                         ),
                       )
                     ],
@@ -91,5 +102,18 @@ class _ToDoListPageState extends State<ToDoListPage> {
         ),
       ),
     );
+  }
+
+  // Functions
+  void onDelete(Todo todo) {
+    setState(() {
+      todoList.remove(todo);
+    });
+  }
+
+  void onDeleteAll() {
+    setState(() {
+      todoList.clear();
+    });
   }
 }

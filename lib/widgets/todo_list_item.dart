@@ -7,9 +7,11 @@ class TodoListItem extends StatelessWidget {
   const TodoListItem({
     Key? key,
     required this.todo,
+    required this.onDelete,
   }) : super(key: key);
 
   final Todo todo;
+  final Function(Todo) onDelete;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,9 @@ class TodoListItem extends StatelessWidget {
                 borderRadius: BorderRadius.circular(4),
                 backgroundColor: Theme.of(context).errorColor, // Get theme color
                 icon: Icons.delete,
-                onPressed: (context) {},
+                onPressed: (context) {
+                  onDelete(todo);
+                },
               ),
             ],
           ),
