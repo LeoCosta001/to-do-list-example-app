@@ -82,9 +82,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
                       ElevatedButton(
                         onPressed: todoList.isNotEmpty
                             ? () {
-                                setState(() {
-                                  onDeleteAll();
-                                });
+                                showDeleteTodoListConfirmationDialog();
                               }
                             : null, // Disable button when is empty
                         style: ElevatedButton.styleFrom(
@@ -137,5 +135,32 @@ class _ToDoListPageState extends State<ToDoListPage> {
     setState(() {
       todoList.clear();
     });
+  }
+
+  void showDeleteTodoListConfirmationDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Limpar tudo?'),
+        content: const Text('Você tem certeza que deseja apagar todas as tarefas?'),
+        actions: [
+          TextButton(
+            style: TextButton.styleFrom(primary: Theme.of(context).errorColor),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text('Cancelar'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              onDeleteAll();
+            },
+            style: TextButton.styleFrom(primary: Colors.indigo),
+            child: const Text('Confirmar'),
+          ),
+        ],
+      ),
+    );
   }
 }
