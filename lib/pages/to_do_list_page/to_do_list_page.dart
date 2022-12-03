@@ -15,6 +15,8 @@ class _ToDoListPageState extends State<ToDoListPage> {
 
   // States
   List<Todo> todoList = [];
+  Todo? deletedTodo;
+  int? deletedTodoIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -106,9 +108,29 @@ class _ToDoListPageState extends State<ToDoListPage> {
 
   // Functions
   void onDelete(Todo todo) {
+    deletedTodo = todo;
+    deletedTodoIndex = todoList.indexOf(todo);
+
     setState(() {
       todoList.remove(todo);
     });
+
+    ScaffoldMessenger.of(context).clearSnackBars();
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('Tarefa ${todo.title} foi removida com sucesso'),
+        backgroundColor: Colors.indigo,
+        action: SnackBarAction(
+          label: 'Desfazer',
+          onPressed: () {
+            setState(() {
+              todoList.insert(deletedTodoIndex!, deletedTodo!);
+            });
+          },
+        ),
+        duration: const Duration(seconds: 4),
+      ),
+    );
   }
 
   void onDeleteAll() {
