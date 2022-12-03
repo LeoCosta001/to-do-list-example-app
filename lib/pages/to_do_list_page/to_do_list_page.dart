@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:to_do_list/models/todo.dart';
+import 'package:to_do_list/repositories/todo_repository.dart';
 import 'package:to_do_list/widgets/todo_list_item.dart';
 
 class ToDoListPage extends StatefulWidget {
@@ -17,6 +18,20 @@ class _ToDoListPageState extends State<ToDoListPage> {
   List<Todo> todoList = [];
   Todo? deletedTodo;
   int? deletedTodoIndex;
+
+  // Repositories
+  final TodoRepository todoRepository = TodoRepository();
+
+  @override
+  void initState() {
+    super.initState();
+
+    todoRepository.getTodoList().then((value) {
+      setState(() {
+        todoList = value;
+      });
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,9 +62,11 @@ class _ToDoListPageState extends State<ToDoListPage> {
                           todoList.add(Todo(title: todoController.text, date: DateTime.now()));
                         });
                         todoController.clear();
+                        todoRepository.saveTodoList(todoList);
+                        todoRepository.getTodoList();
                       },
                       style: ElevatedButton.styleFrom(
-                        primary: Colors.indigo,
+                        backgroundColor: Colors.indigo,
                         padding: const EdgeInsets.all(12),
                       ),
                       child: const Icon(
@@ -129,12 +146,16 @@ class _ToDoListPageState extends State<ToDoListPage> {
         duration: const Duration(seconds: 4),
       ),
     );
+
+    todoRepository.saveTodoList(todoList);
   }
 
   void onDeleteAll() {
     setState(() {
       todoList.clear();
     });
+
+    todoRepository.saveTodoList(todoList);
   }
 
   void showDeleteTodoListConfirmationDialog() {
