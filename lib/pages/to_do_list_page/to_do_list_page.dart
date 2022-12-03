@@ -18,6 +18,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
   List<Todo> todoList = [];
   Todo? deletedTodo;
   int? deletedTodoIndex;
+  String? inputErrorText;
 
   // Repositories
   final TodoRepository todoRepository = TodoRepository();
@@ -47,10 +48,15 @@ class _ToDoListPageState extends State<ToDoListPage> {
                   children: [
                     Expanded(
                       child: TextField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          focusedBorder: const OutlineInputBorder(
+                            borderSide: BorderSide(color: Colors.indigo),
+                          ),
+                          labelStyle: const TextStyle(color: Colors.indigo),
                           labelText: 'Adicione uma tarefa',
                           hintText: 'Ex. Estudar Flutter',
+                          errorText: inputErrorText,
                         ),
                         controller: todoController,
                       ),
@@ -58,12 +64,22 @@ class _ToDoListPageState extends State<ToDoListPage> {
                     const SizedBox(width: 18),
                     ElevatedButton(
                       onPressed: () {
+                        final String inputText = todoController.text;
+                        if (inputText.isEmpty) {
+                          setState(() {
+                            inputErrorText = 'Adicione o nome da terefa';
+                          });
+                          return;
+                        }
+
                         setState(() {
                           todoList.add(Todo(title: todoController.text, date: DateTime.now()));
                         });
                         todoController.clear();
                         todoRepository.saveTodoList(todoList);
                         todoRepository.getTodoList();
+
+                        inputErrorText = null;
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.indigo,
@@ -103,7 +119,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
                               }
                             : null, // Disable button when is empty
                         style: ElevatedButton.styleFrom(
-                          primary: Colors.indigo,
+                          backgroundColor: Colors.indigo,
                           padding: const EdgeInsets.all(12),
                         ),
                         child: const Text(
@@ -166,7 +182,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
         content: const Text('Você tem certeza que deseja apagar todas as tarefas?'),
         actions: [
           TextButton(
-            style: TextButton.styleFrom(primary: Theme.of(context).errorColor),
+            style: TextButton.styleFrom(backgroundColor: Theme.of(context).errorColor),
             onPressed: () {
               Navigator.of(context).pop();
             },
@@ -177,7 +193,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
               Navigator.of(context).pop();
               onDeleteAll();
             },
-            style: TextButton.styleFrom(primary: Colors.indigo),
+            style: TextButton.styleFrom(backgroundColor: Colors.indigo),
             child: const Text('Confirmar'),
           ),
         ],
