@@ -1,16 +1,13 @@
-# to_do_list
+# To-do-list App
 
 A new Flutter project.
 
-## Getting Started
+To learn:
 
-This project is a starting point for a Flutter application.
+- Data persist using the lib "shared_preferences".
+- Slide widgets with action buttons using the lib "flutter_slidable".
+- Formate date using the lib "intl"
+- Use JSON encode and decode (JSON serialize).
+- Use SnackBar to undo user action.
+- Use Dialog to confirm user action.
 
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
