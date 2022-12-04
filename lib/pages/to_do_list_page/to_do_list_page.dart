@@ -186,7 +186,7 @@ class _ToDoListPageState extends State<ToDoListPage> {
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: Text('Cancelar'),
+            child: const Text('Cancelar'),
           ),
           TextButton(
             onPressed: () {
